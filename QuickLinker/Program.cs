@@ -1,8 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using QuickLinker.API.DbContexts;
+using QuickLinker.API.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<QuickLinkerDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("QuickLinkerDbContextConnection")));
+
+builder.Services.AddTransient<IQuickLinkerRepository, QuickLinkerRepository>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
