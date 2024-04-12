@@ -12,6 +12,7 @@ builder.Services.AddDbContext<QuickLinkerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("QuickLinkerDbContextConnection")));
 
 builder.Services.AddTransient<IQuickLinkerRepository, QuickLinkerRepository>();
+builder.Services.AddScoped<IShortLinkService, ShortLinkService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
