@@ -13,13 +13,17 @@ namespace QuickLinker.API.Services
             _dbContext = dbContext;
         }
 
-        public void AddShortenedURL(ShortenedURL shortenedURL)
+        public async Task AddShortenedURL(ShortenedURL shortenedURL)
         {
             if (shortenedURL == null)
             {
                 throw new ArgumentNullException(nameof(shortenedURL));
             }
-            _dbContext.ShortenedURLs.Add(shortenedURL);
+
+            if (await _dbContext.ShortenedURLs.Where(s => s.ShortCode.Equals(shortenedURL.ShortCode)).FirstOrDefaultAsync() == null)
+            {
+                _dbContext.ShortenedURLs.Add(shortenedURL);
+            }
         }
 
         public void DeleteShortenedURL(ShortenedURL shortenedURL)

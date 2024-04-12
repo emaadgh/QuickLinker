@@ -6,7 +6,7 @@ namespace QuickLinker.API.Services
     {
         Task<IEnumerable<ShortenedURL>> GetAllAsync();
         Task<ShortenedURL?> GetOriginalURLAsync(string shortCode);
-        void AddShortenedURL(ShortenedURL shortenedURL);
+        Task AddShortenedURL(ShortenedURL shortenedURL);
         void DeleteShortenedURL(ShortenedURL shortenedURL);
         Task<bool> SaveAsync();
     }
