@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuickLinker.API.DbContexts;
 
@@ -11,9 +12,11 @@ using QuickLinker.API.DbContexts;
 namespace QuickLinker.API.Migrations
 {
     [DbContext(typeof(QuickLinkerDbContext))]
-    partial class QuickLinkerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240411133930_updates dummy data")]
+    partial class updatesdummydata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
