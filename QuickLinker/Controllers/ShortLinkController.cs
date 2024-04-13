@@ -13,18 +13,16 @@ namespace QuickLinker.API.Controllers
     {
         private readonly IQuickLinkerRepository _quickLinkerRepository;
         private readonly IShortLinkService _shortLinkService;
-        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly ProblemDetailsFactory _problemDetailsFactory;
 
         private readonly string? domainURL;
 
         public ShortLinkController(IQuickLinkerRepository quickLinkerRepository, IShortLinkService shortLinkService,
-            IMapper mapper, IConfiguration configuration, ProblemDetailsFactory problemDetailsFactory)
+            IConfiguration configuration, ProblemDetailsFactory problemDetailsFactory)
         {
             _quickLinkerRepository = quickLinkerRepository;
             _shortLinkService = shortLinkService;
-            _mapper = mapper;
             _configuration = configuration;
             _problemDetailsFactory = problemDetailsFactory;
 

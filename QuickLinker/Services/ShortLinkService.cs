@@ -10,6 +10,11 @@ namespace QuickLinker.API.Services
 
         public string GenerateShortLink(string originalUrl)
         {
+            if (string.IsNullOrEmpty(originalUrl))
+            {
+                return string.Empty;
+            }
+
             using var sha256 = SHA256.Create();
             byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(originalUrl));
             string base64Hash = Convert.ToBase64String(hashBytes);
