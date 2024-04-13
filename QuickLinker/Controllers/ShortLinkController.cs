@@ -73,7 +73,8 @@ namespace QuickLinker.API.Controllers
             else
             {
                 var originalURLToReturn = shortenedURL.OriginalURL;
-                return Ok(originalURLToReturn);
+
+                return Redirect(originalURLToReturn);
             }
         }
     }

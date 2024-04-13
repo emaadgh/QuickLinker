@@ -6,6 +6,7 @@ namespace QuickLinker.API.Models
     {
         [Required(ErrorMessage = "You should fill out a URL.")]
         [MaxLength(1000, ErrorMessage = "The URL shouldn't have more than 1000 characters.")]
+        [Url]
         public string OriginalURL { get; set; } = string.Empty;
     }
 }

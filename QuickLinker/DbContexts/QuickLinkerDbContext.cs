@@ -15,7 +15,7 @@ namespace QuickLinker.API.DbContexts
         {
             // seed the database with dummy data
             modelBuilder.Entity<ShortenedURL>().HasData(
-                new ShortenedURL("GRNHv-VdDK", "www.google.com")
+                new ShortenedURL("rGu2aeQORK", "https://www.google.com")
                 {
                     ID = -1
                 });
