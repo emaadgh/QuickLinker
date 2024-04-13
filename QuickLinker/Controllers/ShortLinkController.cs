@@ -39,6 +39,9 @@ namespace QuickLinker.API.Controllers
         }
 
         [HttpPost]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateShortLink(ShortenedURLForCreationDTO shortenedURLForCreationDTO)
         {
             var shortUrl = _shortLinkService.GenerateShortLink(shortenedURLForCreationDTO.OriginalURL);
@@ -55,6 +58,10 @@ namespace QuickLinker.API.Controllers
 
         [HttpGet]
         [Route("/{shortlinkURL}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status302Found)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetOriginalLink([FromRoute] string shortlinkURL)
         {
             if (string.IsNullOrEmpty(shortlinkURL))

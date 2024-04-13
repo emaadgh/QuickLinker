@@ -6,7 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.ReturnHttpNotAcceptable = true;
+}).AddNewtonsoftJson();
 
 builder.Services.AddDbContext<QuickLinkerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("QuickLinkerDbContextConnection")));
