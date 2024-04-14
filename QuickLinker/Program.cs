@@ -17,6 +17,12 @@ builder.Services.AddDbContext<QuickLinkerDbContext>(options =>
 builder.Services.AddTransient<IQuickLinkerRepository, QuickLinkerRepository>();
 builder.Services.AddScoped<IShortLinkService, ShortLinkService>();
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("QuickLinkerRedisConnection");
+    options.InstanceName = "QuickLinker";
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

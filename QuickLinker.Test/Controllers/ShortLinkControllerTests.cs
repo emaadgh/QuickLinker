@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using QuickLinker.API.Controllers;
 using QuickLinker.API.Entities;
 using QuickLinker.API.Models;
 using QuickLinker.API.Services;
+using System.Text;
 
 namespace QuickLinker.Test.Controllers
 {
@@ -15,6 +17,7 @@ namespace QuickLinker.Test.Controllers
         private readonly Mock<IShortLinkService> _mockShortLinkService;
         private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<ProblemDetailsFactory> _mockProblemDetailsFactory;
+        private readonly Mock<IDistributedCache> _mockDistributedCache;
         private readonly ShortLinkController _controller;
 
         private readonly string domainURL = "https://localhost:7132/";
@@ -27,6 +30,7 @@ namespace QuickLinker.Test.Controllers
             _mockShortLinkService = new Mock<IShortLinkService>();
             _mockConfiguration = new Mock<IConfiguration>();
             _mockProblemDetailsFactory = new Mock<ProblemDetailsFactory>();
+            _mockDistributedCache = new Mock<IDistributedCache>();
 
             _mockConfiguration.Setup(x => x["QuickLinkerDomain:Domain"]).Returns(domainURL);
 
@@ -34,7 +38,8 @@ namespace QuickLinker.Test.Controllers
                 _mockRepository.Object,
                 _mockShortLinkService.Object,
                 _mockConfiguration.Object,
-                _mockProblemDetailsFactory.Object
+                _mockProblemDetailsFactory.Object,
+                _mockDistributedCache.Object
             );
         }
 
@@ -64,6 +69,36 @@ namespace QuickLinker.Test.Controllers
 
             _mockRepository.Setup(x => x.GetOriginalURLAsync(shortLinkURL)).ReturnsAsync(shortenedURL);
 
+            _mockDistributedCache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+              .Returns((string key, CancellationToken token) =>
+              {
+                  return Task.FromResult<byte[]?>(null);
+              });
+
+            // Act
+            var result = await _controller.GetOriginalLink(shortLinkURL);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            Assert.Equal(originalURL, redirectResult.Url);
+        }
+
+        [Fact]
+        public async Task GetOriginalLink_ValidShortLinkAndItsCached_MustReturnsRedirectResult()
+        {
+            // Arrange
+            var shortLinkURL = domainURL + shortCode;
+
+            var shortenedURL = new ShortenedURL(shortCode, originalURL);
+
+            _mockRepository.Setup(x => x.GetOriginalURLAsync(shortLinkURL)).ReturnsAsync(shortenedURL);
+
+            _mockDistributedCache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+              .Returns((string key, CancellationToken token) =>
+              {
+                  return Task.FromResult<byte[]?>(Encoding.UTF8.GetBytes(originalURL));
+              });
+
             // Act
             var result = await _controller.GetOriginalLink(shortLinkURL);
 
@@ -79,6 +114,12 @@ namespace QuickLinker.Test.Controllers
             var shortlinkURL = "invalidShortLink";
             _mockRepository.Setup(x => x.GetOriginalURLAsync(shortlinkURL)).ReturnsAsync((ShortenedURL?)null);
 
+            _mockDistributedCache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+              .Returns((string key, CancellationToken token) =>
+              {
+                  return Task.FromResult<byte[]?>(null);
+              });
+
             // Act
             var result = await _controller.GetOriginalLink(shortlinkURL);
 
@@ -93,7 +134,7 @@ namespace QuickLinker.Test.Controllers
             var result = await _controller.GetOriginalLink(null);
 
             // Assert
-            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.IsType<BadRequestObjectResult>(result);
         }
 
         [Fact]
@@ -103,7 +144,7 @@ namespace QuickLinker.Test.Controllers
             var result = await _controller.GetOriginalLink("");
 
             // Assert
-            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.IsType<BadRequestObjectResult>(result);
         }
     }
 }
