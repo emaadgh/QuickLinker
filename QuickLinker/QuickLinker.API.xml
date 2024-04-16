@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>QuickLinker.API</name>
+    </assembly>
+    <members>
+        <member name="M:QuickLinker.API.Controllers.ShortLinkController.#ctor(QuickLinker.API.Services.IQuickLinkerRepository,QuickLinker.API.Services.IShortLinkService,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Mvc.Infrastructure.ProblemDetailsFactory,Microsoft.Extensions.Caching.Distributed.IDistributedCache)">
+            <summary>
+            Constructor for ShortLinkController.
+            </summary>
+        </member>
+        <member name="M:QuickLinker.API.Controllers.ShortLinkController.CreateShortLink(QuickLinker.API.Models.ShortenedURLForCreationDTO)">
+            <summary>
+            Creates a short link for the provided original URL.
+            </summary>
+            <param name="shortenedURLForCreationDTO">DTO containing the original URL.</param>
+            <returns>The shortened URL.</returns>
+        </member>
+        <member name="M:QuickLinker.API.Controllers.ShortLinkController.GetOriginalLink(System.String)">
+            <summary>
+            Redirects to the original URL associated with the provided short code.
+            </summary>
+            <param name="shortCode">Short code to look up the original URL.</param>
+            <returns>Redirect to the original URL.</returns>
+        </member>
+        <member name="T:QuickLinker.API.Migrations.init">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.init.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.init.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.init.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:QuickLinker.API.Migrations.addsdummydata">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.addsdummydata.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.addsdummydata.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.addsdummydata.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:QuickLinker.API.Migrations.updatesdummydata">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.updatesdummydata.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.updatesdummydata.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.updatesdummydata.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:QuickLinker.API.Migrations.updatedummydatatobeavalidURL">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.updatedummydatatobeavalidURL.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.updatedummydatatobeavalidURL.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:QuickLinker.API.Migrations.updatedummydatatobeavalidURL.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:QuickLinker.API.Models.ShortenedURLForCreationDTO">
+            <summary>
+            Data Transfer Object (DTO) for creating a shortened URL.
+            </summary>
+        </member>
+        <member name="P:QuickLinker.API.Models.ShortenedURLForCreationDTO.OriginalURL">
+            <summary>
+            The original URL to be shortened.
+            </summary>
+        </member>
+    </members>
+</doc>

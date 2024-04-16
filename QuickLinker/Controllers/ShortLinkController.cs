@@ -20,6 +20,9 @@ namespace QuickLinker.API.Controllers
         private readonly string? domainURL;
         private readonly int cacheExpirationInDays = 15;
 
+        /// <summary>
+        /// Constructor for ShortLinkController.
+        /// </summary>
         public ShortLinkController(IQuickLinkerRepository quickLinkerRepository, IShortLinkService shortLinkService,
             IConfiguration configuration, ProblemDetailsFactory problemDetailsFactory, IDistributedCache distributedCache)
         {
@@ -39,6 +42,11 @@ namespace QuickLinker.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a short link for the provided original URL.
+        /// </summary>
+        /// <param name="shortenedURLForCreationDTO">DTO containing the original URL.</param>
+        /// <returns>The shortened URL.</returns>
         [HttpPost]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -64,6 +72,11 @@ namespace QuickLinker.API.Controllers
             return Ok(shortenedUrlToReturn);
         }
 
+        /// <summary>
+        /// Redirects to the original URL associated with the provided short code.
+        /// </summary>
+        /// <param name="shortCode">Short code to look up the original URL.</param>
+        /// <returns>Redirect to the original URL.</returns>
         [HttpGet]
         [Route("/{shortCode}")]
         [Produces("application/json")]
