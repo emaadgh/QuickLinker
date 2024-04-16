@@ -4,6 +4,17 @@
         <name>QuickLinker.API</name>
     </assembly>
     <members>
+        <member name="T:QuickLinker.API.Controllers.RootController">
+            <summary>
+            Controller for accessing root API endpoints.
+            </summary>
+        </member>
+        <member name="M:QuickLinker.API.Controllers.RootController.GetRoot">
+            <summary>
+            Get the root of the API.
+            </summary>
+            <returns>An IActionResult containing links to different API endpoints.</returns> 
+        </member>
         <member name="M:QuickLinker.API.Controllers.ShortLinkController.#ctor(QuickLinker.API.Services.IQuickLinkerRepository,QuickLinker.API.Services.IShortLinkService,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Mvc.Infrastructure.ProblemDetailsFactory,Microsoft.Extensions.Caching.Distributed.IDistributedCache)">
             <summary>
             Constructor for ShortLinkController.

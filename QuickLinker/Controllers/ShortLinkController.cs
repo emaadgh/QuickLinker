@@ -47,7 +47,7 @@ namespace QuickLinker.API.Controllers
         /// </summary>
         /// <param name="shortenedURLForCreationDTO">DTO containing the original URL.</param>
         /// <returns>The shortened URL.</returns>
-        [HttpPost]
+        [HttpPost(Name = "CreateShortLink")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -77,8 +77,7 @@ namespace QuickLinker.API.Controllers
         /// </summary>
         /// <param name="shortCode">Short code to look up the original URL.</param>
         /// <returns>Redirect to the original URL.</returns>
-        [HttpGet]
-        [Route("/{shortCode}")]
+        [HttpGet("/{shortCode}", Name = "GetOriginalLink")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status302Found)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
