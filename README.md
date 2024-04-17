@@ -177,6 +177,30 @@ With Docker and Docker Compose, you can easily deploy and manage the QuickLinker
 
 Unit tests are provided in the `QuickLinker.Test` project. These tests cover various scenarios to ensure the functionality of the API endpoints.
 
+## Database Reset for Testing Purposes
+
+For testing purposes, you can add the following code snippet to your `Program.cs` file. This code will reset the database and its data every time the application is run:
+
+```
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var context = scope.ServiceProvider.GetService<QuickLinkerDbContext>();
+        if (context != null)
+        {
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.MigrateAsync();
+        }
+    }
+    catch (Exception ex)
+    {
+        // Handle any exceptions if necessary
+    }
+}
+```
+Make sure to replace `QuickLinkerDbContext` with your actual DbContext class if it's named differently.
+
 ## Creator
 
 - [Emaad Ghorbani](https://github.com/emaadgh)
