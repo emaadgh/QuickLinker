@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  db:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${SA_PASSWORD}
+    ports:
+      - "1433:1433"
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+  quicklinker.api:
+    image: ${DOCKER_REGISTRY-}quicklinkerapi
+    build:
+      context: .
+      dockerfile: QuickLinker/Dockerfile
+    depends_on:
+      - db
+      - redis
