@@ -9,6 +9,8 @@ QuickLinker.API is a backend service built using ASP.NET Core, designed to simpl
 - **Link Resolution**: Resolve shortened URLs to their original destinations.
 - **Caching**: Utilize distributed caching for improved performance.
 - **API Endpoints**: Exposes RESTful API endpoints for interaction.
+- **CI/CD Pipeline**: Automate the build, test, and deployment processes for the QuickLinker project.
+- **Dockerizing**: Containerize the QuickLinker API using DockerFile and Docker Compose for simplified deployment and management.
 
 ## Getting Started
 
