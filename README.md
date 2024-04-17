@@ -115,7 +115,7 @@ Here's an example of how you can add the `QuickLinkerDomain:Domain` configuratio
   // Other configurations...
 }
 ```
-If you deploy the MyBook API to Azure App Service, you can add the connection strings in the Connection Strings section of the Configuration settings in the Azure portal. Azure App Service securely encrypts connection strings at rest and transmits them over an encrypted channel, ensuring the security of your sensitive information.
+If you deploy the QuickLinker API to Azure App Service, you can add the connection strings in the Connection Strings section of the Configuration settings in the Azure portal. Azure App Service securely encrypts connection strings at rest and transmits them over an encrypted channel, ensuring the security of your sensitive information.
 
 ## Usage
 
@@ -147,6 +147,31 @@ In addition, we utilize Azure DevOps Pipeline Releases to continuously deploy ar
 <img src="https://github.com/emaadgh/mybook/assets/10380342/d503ac6a-b6b7-46f7-9024-cd05444577ce" width="585" height="333.5">
 
 Users can leverage this pipeline configuration in Microsoft Azure DevOps's Pipeline service to automate the software delivery process.
+
+## Dockerizing the API with Dockerfile and Docker Compose
+
+The QuickLinker API can be easily containerized using DockerFile and Docker Compose to orchestrate multiple containers. Docker provides a consistent environment across different systems, making it easier to deploy and manage applications.
+
+To Dockerize the QuickLinker API and run it with Docker Compose, follow these steps:
+
+1. Ensure you have Docker installed on your system.
+2. Navigate to the root directory of the QuickLinker project.
+3. Create a `.env` file beside the `docker-compose.yml` file.
+4. Add the following environment variable to the `.env` file:
+```
+SA_PASSWORD=preferedpassword
+```
+Replace `preferedpassword` with your preferred SQL Server SA password.
+
+5. Don't forget to update connection strings `QuickLinkerDbContextConnection` and `QuickLinkerRedisConnection` in the app's configuration file like `appsettings.json` before running the QuickLinker API in a Docker container.
+
+6. Run the following command in the terminal to start the containers:
+```
+docker-compose up
+```
+This will build the QuickLinker API Docker image and start the containers for the API, the SQL Server database, and a Redis cache instance.
+
+With Docker and Docker Compose, you can easily deploy and manage the QuickLinker API in a containerized environment, ensuring consistency and scalability across different systems.
 
 ## Testing
 
