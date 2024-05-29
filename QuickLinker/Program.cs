@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using QuickLinker.API;
 using QuickLinker.API.DbContexts;
 using QuickLinker.API.Services;
 using System.Reflection;
@@ -12,15 +13,19 @@ builder.Services.AddControllers(options =>
     options.ReturnHttpNotAcceptable = true;
 }).AddNewtonsoftJson();
 
+builder.Services.Configure<AppSettings>(builder.Configuration);
+var settings = builder.Configuration.Get<AppSettings>();
+ArgumentNullException.ThrowIfNull(settings, nameof(settings));
+
 builder.Services.AddDbContext<QuickLinkerDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("QuickLinkerDbContextConnection")));
+    options.UseSqlServer(settings.ConnectionStrings.QuickLinkerDbContextConnection));
 
 builder.Services.AddTransient<IQuickLinkerRepository, QuickLinkerRepository>();
 builder.Services.AddScoped<IShortLinkService, ShortLinkService>();
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetConnectionString("QuickLinkerRedisConnection");
+    options.Configuration = settings.ConnectionStrings.QuickLinkerRedisConnection;
     options.InstanceName = "QuickLinker";
 });
 

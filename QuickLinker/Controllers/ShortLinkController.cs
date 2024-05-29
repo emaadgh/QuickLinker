@@ -13,7 +13,6 @@ namespace QuickLinker.API.Controllers
     {
         private readonly IQuickLinkerRepository _quickLinkerRepository;
         private readonly IShortLinkService _shortLinkService;
-        private readonly IConfiguration _configuration;
         private readonly ProblemDetailsFactory _problemDetailsFactory;
         private readonly IDistributedCache _distributedCache;
 
@@ -28,13 +27,14 @@ namespace QuickLinker.API.Controllers
         {
             _quickLinkerRepository = quickLinkerRepository;
             _shortLinkService = shortLinkService;
-            _configuration = configuration;
             _problemDetailsFactory = problemDetailsFactory;
             _distributedCache = distributedCache;
 
-            if (!string.IsNullOrEmpty(_configuration["QuickLinkerDomain:Domain"]))
+            AppSettings? appSettings = configuration.Get<AppSettings>();
+
+            if (appSettings is not null && appSettings.QuickLinkerDomain.Domain is not null)
             {
-                domainURL = _configuration["QuickLinkerDomain:Domain"];
+                domainURL = appSettings.QuickLinkerDomain.Domain;
             }
             else
             {

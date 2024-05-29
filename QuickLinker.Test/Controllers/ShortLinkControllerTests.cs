@@ -15,7 +15,6 @@ namespace QuickLinker.Test.Controllers
     {
         private readonly Mock<IQuickLinkerRepository> _mockRepository;
         private readonly Mock<IShortLinkService> _mockShortLinkService;
-        private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<ProblemDetailsFactory> _mockProblemDetailsFactory;
         private readonly Mock<IDistributedCache> _mockDistributedCache;
         private readonly ShortLinkController _controller;
@@ -28,16 +27,21 @@ namespace QuickLinker.Test.Controllers
         {
             _mockRepository = new Mock<IQuickLinkerRepository>();
             _mockShortLinkService = new Mock<IShortLinkService>();
-            _mockConfiguration = new Mock<IConfiguration>();
             _mockProblemDetailsFactory = new Mock<ProblemDetailsFactory>();
             _mockDistributedCache = new Mock<IDistributedCache>();
 
-            _mockConfiguration.Setup(x => x["QuickLinkerDomain:Domain"]).Returns(domainURL);
+            var inMemorySettings = new Dictionary<string, string?> {
+                {"QuickLinkerDomain:Domain", domainURL}
+            };
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(inMemorySettings)
+                .Build();
 
             _controller = new ShortLinkController(
                 _mockRepository.Object,
                 _mockShortLinkService.Object,
-                _mockConfiguration.Object,
+                configuration,
                 _mockProblemDetailsFactory.Object,
                 _mockDistributedCache.Object
             );
