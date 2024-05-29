@@ -31,18 +31,18 @@ QuickLinker.API is a backend service built using ASP.NET Core, designed to simpl
         ```
 
     **QuickLinker.API Dependencies**:
-    - Microsoft.AspNetCore.Mvc.NewtonsoftJson (v8.0.4)
-    - Microsoft.EntityFrameworkCore.SqlServer (v8.0.4)
-    - Microsoft.EntityFrameworkCore.Tools (v8.0.4)
-    - Microsoft.Extensions.Caching.StackExchangeRedis (v8.0.4)
-    - Swashbuckle.AspNetCore (v6.4.0)
+    - Microsoft.AspNetCore.Mvc.NewtonsoftJson
+    - Microsoft.EntityFrameworkCore.SqlServer
+    - Microsoft.EntityFrameworkCore.Tools
+    - Microsoft.Extensions.Caching.StackExchangeRedis
+    - Swashbuckle.AspNetCore
 
     **QuickLinker.Test Dependencies**:
-    - coverlet.collector (v6.0.0)
-    - Microsoft.NET.Test.Sdk (v17.8.0)
-    - Moq (v4.20.70)
-    - xunit (v2.5.3)
-    - xunit.runner.visualstudio (v2.5.3)
+    - coverlet.collector
+    - Microsoft.NET.Test.Sdk
+    - Moq
+    - xunit
+    - xunit.runner.visualstudio
 
 3. **Run the Application**:
     - Start the API by running the following command in your terminal:
