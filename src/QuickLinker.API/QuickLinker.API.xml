@@ -20,18 +20,20 @@
             Constructor for ShortLinkController.
             </summary>
         </member>
-        <member name="M:QuickLinker.API.Controllers.ShortLinkController.CreateShortLink(QuickLinker.API.Models.ShortenedURLForCreationDTO)">
+        <member name="M:QuickLinker.API.Controllers.ShortLinkController.CreateShortLink(QuickLinker.API.Models.ShortenedURLForCreationDTO,System.Threading.CancellationToken)">
             <summary>
             Creates a short link for the provided original URL.
             </summary>
             <param name="shortenedURLForCreationDTO">DTO containing the original URL.</param>
+            <param name="cancellationToken"> Cancellation token</param>
             <returns>The shortened URL.</returns>
         </member>
-        <member name="M:QuickLinker.API.Controllers.ShortLinkController.GetOriginalLink(System.String)">
+        <member name="M:QuickLinker.API.Controllers.ShortLinkController.GetOriginalLink(System.String,System.Threading.CancellationToken)">
             <summary>
             Redirects to the original URL associated with the provided short code.
             </summary>
             <param name="shortCode">Short code to look up the original URL.</param>
+            <param name="cancellationToken"> Cancellation token</param>
             <returns>Redirect to the original URL.</returns>
         </member>
         <member name="T:QuickLinker.API.Migrations.init">

@@ -55,7 +55,7 @@ else
         appBuilder.Run(async context =>
         {
             context.Response.StatusCode = 500;
-            await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
+            await context.Response.WriteAsync("An unexpected fault happened. Try again later.", cancellationToken: context.RequestAborted);
         });
     });
 }

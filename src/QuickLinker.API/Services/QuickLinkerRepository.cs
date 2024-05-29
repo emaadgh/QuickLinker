@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuickLinker.API.DbContexts;
 using QuickLinker.API.Entities;
+using System.Threading;
 
 namespace QuickLinker.API.Services
 {
@@ -13,14 +14,14 @@ namespace QuickLinker.API.Services
             _dbContext = dbContext;
         }
 
-        public async Task AddShortenedURL(ShortenedURL shortenedURL)
+        public async Task AddShortenedURL(ShortenedURL shortenedURL, CancellationToken cancellationToken)
         {
             if (shortenedURL == null)
             {
                 throw new ArgumentNullException(nameof(shortenedURL));
             }
 
-            if (await _dbContext.ShortenedURLs.Where(s => s.ShortCode.Equals(shortenedURL.ShortCode)).FirstOrDefaultAsync() == null)
+            if (await _dbContext.ShortenedURLs.Where(s => s.ShortCode.Equals(shortenedURL.ShortCode)).FirstOrDefaultAsync(cancellationToken) == null)
             {
                 _dbContext.ShortenedURLs.Add(shortenedURL);
             }
@@ -31,19 +32,19 @@ namespace QuickLinker.API.Services
             _dbContext.ShortenedURLs.Remove(shortenedURL);
         }
 
-        public async Task<IEnumerable<ShortenedURL>> GetAllAsync()
+        public async Task<IEnumerable<ShortenedURL>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _dbContext.ShortenedURLs.ToListAsync();
+            return await _dbContext.ShortenedURLs.ToListAsync(cancellationToken);
         }
 
-        public async Task<ShortenedURL?> GetOriginalURLAsync(string shortCode)
+        public async Task<ShortenedURL?> GetOriginalURLAsync(string shortCode, CancellationToken cancellationToken)
         {
-            return await _dbContext.ShortenedURLs.Where(s => s.ShortCode.Equals(shortCode)).FirstOrDefaultAsync();
+            return await _dbContext.ShortenedURLs.Where(s => s.ShortCode.Equals(shortCode)).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<bool> SaveAsync()
+        public async Task<bool> SaveAsync(CancellationToken cancellationToken)
         {
-            return (await _dbContext.SaveChangesAsync() > 0);
+            return (await _dbContext.SaveChangesAsync(cancellationToken) > 0);
         }
     }
 }

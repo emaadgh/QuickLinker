@@ -46,26 +46,27 @@ namespace QuickLinker.API.Controllers
         /// Creates a short link for the provided original URL.
         /// </summary>
         /// <param name="shortenedURLForCreationDTO">DTO containing the original URL.</param>
+        /// <param name="cancellationToken"> Cancellation token</param>
         /// <returns>The shortened URL.</returns>
         [HttpPost(Name = "CreateShortLink")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateShortLink(ShortenedURLForCreationDTO shortenedURLForCreationDTO)
+        public async Task<IActionResult> CreateShortLink(ShortenedURLForCreationDTO shortenedURLForCreationDTO, CancellationToken cancellationToken)
         {
             var shortUrl = _shortLinkService.GenerateShortLink(shortenedURLForCreationDTO.OriginalURL);
 
             ShortenedURL shortenedURL = new ShortenedURL(shortUrl, shortenedURLForCreationDTO.OriginalURL);
 
-            await _quickLinkerRepository.AddShortenedURL(shortenedURL);
-            await _quickLinkerRepository.SaveAsync();
+            await _quickLinkerRepository.AddShortenedURL(shortenedURL, cancellationToken);
+            await _quickLinkerRepository.SaveAsync(cancellationToken);
 
             DistributedCacheEntryOptions options = new()
             {
                 AbsoluteExpiration = DateTimeOffset.UtcNow.AddDays(cacheExpirationInDays)
             };
 
-            await _distributedCache.SetStringAsync(shortenedURL.ShortCode, shortenedURL.OriginalURL, options);
+            await _distributedCache.SetStringAsync(shortenedURL.ShortCode, shortenedURL.OriginalURL, options, cancellationToken);
 
             var shortenedUrlToReturn = domainURL + shortenedURL.ShortCode;
 
@@ -76,13 +77,14 @@ namespace QuickLinker.API.Controllers
         /// Redirects to the original URL associated with the provided short code.
         /// </summary>
         /// <param name="shortCode">Short code to look up the original URL.</param>
+        /// <param name="cancellationToken"> Cancellation token</param>
         /// <returns>Redirect to the original URL.</returns>
         [HttpGet("/{shortCode}", Name = "GetOriginalLink")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status302Found)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetOriginalLink([FromRoute] string shortCode)
+        public async Task<IActionResult> GetOriginalLink([FromRoute] string shortCode, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(shortCode))
             {
@@ -91,11 +93,11 @@ namespace QuickLinker.API.Controllers
                     detail: $"url cannot be null or empty, Enter a valid shortened URL"));
             }
 
-            var originalURLToReturn = await _distributedCache.GetStringAsync(shortCode);
+            var originalURLToReturn = await _distributedCache.GetStringAsync(shortCode, cancellationToken);
 
             if (originalURLToReturn == null)
             {
-                ShortenedURL? shortenedURL = await _quickLinkerRepository.GetOriginalURLAsync(shortCode);
+                ShortenedURL? shortenedURL = await _quickLinkerRepository.GetOriginalURLAsync(shortCode, cancellationToken);
 
                 if (shortenedURL == null)
                 {
@@ -108,7 +110,7 @@ namespace QuickLinker.API.Controllers
                         AbsoluteExpiration = DateTimeOffset.UtcNow.AddDays(cacheExpirationInDays)
                     };
 
-                    await _distributedCache.SetStringAsync(shortenedURL.ShortCode, shortenedURL.OriginalURL, options);
+                    await _distributedCache.SetStringAsync(shortenedURL.ShortCode, shortenedURL.OriginalURL, options, cancellationToken);
 
                     originalURLToReturn = shortenedURL.OriginalURL;
 

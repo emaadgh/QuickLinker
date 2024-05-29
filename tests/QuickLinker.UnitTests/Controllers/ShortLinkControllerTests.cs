@@ -54,8 +54,10 @@ namespace QuickLinker.Test.Controllers
             var shortenedURLForCreationDTO = new ShortenedURLForCreationDTO { OriginalURL = originalURL };
             _mockShortLinkService.Setup(x => x.GenerateShortLink(shortenedURLForCreationDTO.OriginalURL)).Returns(shortCode);
 
+            CancellationToken cancellationToken = CancellationToken.None;
+
             // Act
-            var result = await _controller.CreateShortLink(shortenedURLForCreationDTO);
+            var result = await _controller.CreateShortLink(shortenedURLForCreationDTO, cancellationToken);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -71,7 +73,9 @@ namespace QuickLinker.Test.Controllers
 
             var shortenedURL = new ShortenedURL(shortCode, originalURL);
 
-            _mockRepository.Setup(x => x.GetOriginalURLAsync(shortLinkURL)).ReturnsAsync(shortenedURL);
+            CancellationToken cancellationToken = CancellationToken.None;
+
+            _mockRepository.Setup(x => x.GetOriginalURLAsync(shortLinkURL, cancellationToken)).ReturnsAsync(shortenedURL);
 
             _mockDistributedCache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
               .Returns((string key, CancellationToken token) =>
@@ -80,7 +84,7 @@ namespace QuickLinker.Test.Controllers
               });
 
             // Act
-            var result = await _controller.GetOriginalLink(shortLinkURL);
+            var result = await _controller.GetOriginalLink(shortLinkURL, cancellationToken);
 
             // Assert
             var redirectResult = Assert.IsType<RedirectResult>(result);
@@ -95,7 +99,9 @@ namespace QuickLinker.Test.Controllers
 
             var shortenedURL = new ShortenedURL(shortCode, originalURL);
 
-            _mockRepository.Setup(x => x.GetOriginalURLAsync(shortLinkURL)).ReturnsAsync(shortenedURL);
+            CancellationToken cancellationToken = CancellationToken.None;
+
+            _mockRepository.Setup(x => x.GetOriginalURLAsync(shortLinkURL, cancellationToken)).ReturnsAsync(shortenedURL);
 
             _mockDistributedCache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
               .Returns((string key, CancellationToken token) =>
@@ -104,7 +110,7 @@ namespace QuickLinker.Test.Controllers
               });
 
             // Act
-            var result = await _controller.GetOriginalLink(shortLinkURL);
+            var result = await _controller.GetOriginalLink(shortLinkURL, cancellationToken);
 
             // Assert
             var redirectResult = Assert.IsType<RedirectResult>(result);
@@ -116,7 +122,10 @@ namespace QuickLinker.Test.Controllers
         {
             // Arrange
             var shortlinkURL = "invalidShortLink";
-            _mockRepository.Setup(x => x.GetOriginalURLAsync(shortlinkURL)).ReturnsAsync((ShortenedURL?)null);
+
+            CancellationToken cancellationToken = CancellationToken.None;
+
+            _mockRepository.Setup(x => x.GetOriginalURLAsync(shortlinkURL, cancellationToken)).ReturnsAsync((ShortenedURL?)null);
 
             _mockDistributedCache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
               .Returns((string key, CancellationToken token) =>
@@ -125,7 +134,7 @@ namespace QuickLinker.Test.Controllers
               });
 
             // Act
-            var result = await _controller.GetOriginalLink(shortlinkURL);
+            var result = await _controller.GetOriginalLink(shortlinkURL, cancellationToken);
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
@@ -134,8 +143,11 @@ namespace QuickLinker.Test.Controllers
         [Fact]
         public async Task GetOriginalLink_NullShortLink_MustReturnsBadRequestResult()
         {
+            // Arrange
+            CancellationToken cancellationToken = CancellationToken.None;
+
             // Act
-            var result = await _controller.GetOriginalLink(null);
+            var result = await _controller.GetOriginalLink(null, cancellationToken);
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -144,8 +156,11 @@ namespace QuickLinker.Test.Controllers
         [Fact]
         public async Task GetOriginalLink_EmptyShortLink_MustReturnsBadRequestResult()
         {
+            // Arrange
+            CancellationToken cancellationToken = CancellationToken.None;
+
             // Act
-            var result = await _controller.GetOriginalLink("");
+            var result = await _controller.GetOriginalLink("", cancellationToken);
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
