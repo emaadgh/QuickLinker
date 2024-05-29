@@ -16,7 +16,7 @@ services:
     image: ${DOCKER_REGISTRY-}quicklinkerapi
     build:
       context: .
-      dockerfile: QuickLinker/Dockerfile
+      dockerfile: src/QuickLinker.API/Dockerfile
     depends_on:
       - db
       - redis

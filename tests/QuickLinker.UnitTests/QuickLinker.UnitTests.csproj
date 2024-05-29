@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuickLinker\QuickLinker.API.csproj" />
+    <ProjectReference Include="..\..\src\QuickLinker.API\QuickLinker.API.csproj" />
   </ItemGroup>
 
   <ItemGroup>
