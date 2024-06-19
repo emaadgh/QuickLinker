@@ -61,13 +61,6 @@ namespace QuickLinker.API.Controllers
             await _quickLinkerRepository.AddShortenedURL(shortenedURL, cancellationToken);
             await _quickLinkerRepository.SaveAsync(cancellationToken);
 
-            DistributedCacheEntryOptions options = new()
-            {
-                AbsoluteExpiration = DateTimeOffset.UtcNow.AddDays(cacheExpirationInDays)
-            };
-
-            await _distributedCache.SetStringAsync(shortenedURL.ShortCode, shortenedURL.OriginalURL, options, cancellationToken);
-
             var shortenedUrlToReturn = domainURL + shortenedURL.ShortCode;
 
             return Ok(shortenedUrlToReturn);
