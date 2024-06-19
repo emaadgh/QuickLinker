@@ -12,6 +12,16 @@ QuickLinker.API is a backend service built using ASP.NET Core, designed to simpl
 - **CI/CD Pipeline**: Automate the build, test, and deployment processes for the QuickLinker project.
 - **Dockerizing**: Containerize the QuickLinker API using DockerFile and Docker Compose for simplified deployment and management.
 
+## Usage
+
+1. Send POST requests to `/api/ShortLink` with a JSON payload containing the original URL to generate a shortened link.
+2. Receive the shortened URL in the response.
+3. Use the shortened URL for sharing or accessing the original content.
+4. Send GET requests to `/{shortCode}` with the short code to resolve and redirect to the original URL.
+
+<img src="https://github.com/emaadgh/QuickLinker/assets/10380342/19b63f13-d8fc-499d-8bf8-dccb003819d9" width="1038" height="572">
+
+
 ## Getting Started
 
 1. **Clone the Repository**:
@@ -43,13 +53,19 @@ QuickLinker.API is a backend service built using ASP.NET Core, designed to simpl
     - Moq
     - xunit
     - xunit.runner.visualstudio
+  
+3. **Run Redis Cache on Docker**:
+    - Fire up Docker and run the following command to start a Redis container:
+        ```bash
+        docker run --name quicklinker-redis -d -p 6379:6379 redis
+        ```
 
-3. **Run the Application**:
+4. **Run the Application**:
     - Start the API by running the following command in your terminal:
         ```bash
         dotnet run
         ```
-4. **Database Migration**:
+5. **Database Migration**:
     - After building the project, run the following command to create or update the database based on migration files:
         ```bash
         dotnet ef database update
@@ -59,14 +75,14 @@ QuickLinker.API is a backend service built using ASP.NET Core, designed to simpl
         dotnet tool install --global dotnet-ef
         ```
 
-5. **Access the API**:
+6. **Access the API**:
     - By default, the API will be hosted on `localhost` with a randomly assigned port. You can access the API using the following URL format:
         ```
         https://localhost:<PORT>/api
         ```
     - Replace `<PORT>` with the port number assigned to the API during startup.
 
-6. **Explore the API**:
+7. **Explore the API**:
     - Once the API is running, you can use tools like **Swagger** or **Postman** to interact with the endpoints.
     - Visit the Swagger UI at `https://localhost:<PORT>/swagger/index.html` to explore the API documentation interactively.
 
@@ -118,13 +134,6 @@ Here's an example of how you can add the `QuickLinkerDomain:Domain` configuratio
 }
 ```
 If you deploy the QuickLinker API to Azure App Service, you can add the connection strings in the Connection Strings section of the Configuration settings in the Azure portal. Azure App Service securely encrypts connection strings at rest and transmits them over an encrypted channel, ensuring the security of your sensitive information.
-
-## Usage
-
-1. Send POST requests to `/api/ShortLink` with a JSON payload containing the original URL to generate a shortened link.
-2. Receive the shortened URL in the response.
-3. Use the shortened URL for sharing or accessing the original content.
-4. Send GET requests to `/{shortCode}` with the short code to resolve and redirect to the original URL.
 
 ## CI/CD Pipeline
 
