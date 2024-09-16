@@ -22,8 +22,12 @@ namespace QuickLinker.API.Controllers
         /// <summary>
         /// Constructor for ShortLinkController.
         /// </summary>
-        public ShortLinkController(IQuickLinkerRepository quickLinkerRepository, IShortLinkService shortLinkService,
-            IConfiguration configuration, ProblemDetailsFactory problemDetailsFactory, IDistributedCache distributedCache)
+        public ShortLinkController(
+            IQuickLinkerRepository quickLinkerRepository,
+            IShortLinkService shortLinkService,
+            IConfiguration configuration,
+            ProblemDetailsFactory problemDetailsFactory,
+            IDistributedCache distributedCache)
         {
             _quickLinkerRepository = quickLinkerRepository;
             _shortLinkService = shortLinkService;
@@ -52,7 +56,9 @@ namespace QuickLinker.API.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateShortLink(ShortenedURLForCreationDTO shortenedURLForCreationDTO, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateShortLink(
+            ShortenedURLForCreationDTO shortenedURLForCreationDTO,
+            CancellationToken cancellationToken)
         {
             var shortUrl = _shortLinkService.GenerateShortLink(shortenedURLForCreationDTO.OriginalURL);
 
@@ -77,7 +83,9 @@ namespace QuickLinker.API.Controllers
         [ProducesResponseType(StatusCodes.Status302Found)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetOriginalLink([FromRoute] string shortCode, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetOriginalLink(
+            [FromRoute] string shortCode,
+            CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(shortCode))
             {
