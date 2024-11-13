@@ -21,7 +21,11 @@ namespace QuickLinker.API.Services
                 throw new ArgumentNullException(nameof(shortenedURL));
             }
 
-            if (await _dbContext.ShortenedURLs.Where(s => s.ShortCode.Equals(shortenedURL.ShortCode)).FirstOrDefaultAsync(cancellationToken) == null)
+            var shortenedFromDatabase = await _dbContext.ShortenedURLs.FirstOrDefaultAsync(
+                                                                       s => s.ShortCode.Equals(shortenedURL.ShortCode),
+                                                                       cancellationToken);
+
+            if (shortenedFromDatabase == null)
             {
                 _dbContext.ShortenedURLs.Add(shortenedURL);
             }
@@ -39,7 +43,7 @@ namespace QuickLinker.API.Services
 
         public async Task<ShortenedURL?> GetOriginalURLAsync(string shortCode, CancellationToken cancellationToken)
         {
-            return await _dbContext.ShortenedURLs.Where(s => s.ShortCode.Equals(shortCode)).FirstOrDefaultAsync(cancellationToken);
+            return await _dbContext.ShortenedURLs.FirstOrDefaultAsync(s => s.ShortCode.Equals(shortCode), cancellationToken);
         }
 
         public async Task<bool> SaveAsync(CancellationToken cancellationToken)
