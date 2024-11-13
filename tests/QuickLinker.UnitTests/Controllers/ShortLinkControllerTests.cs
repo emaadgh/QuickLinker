@@ -6,7 +6,9 @@ using Moq;
 using QuickLinker.API.Controllers;
 using QuickLinker.API.Entities;
 using QuickLinker.API.Models;
+using QuickLinker.API.Observability;
 using QuickLinker.API.Services;
+using System.Diagnostics.Metrics;
 using System.Text;
 
 namespace QuickLinker.Test.Controllers
@@ -17,6 +19,7 @@ namespace QuickLinker.Test.Controllers
         private readonly Mock<IShortLinkService> _mockShortLinkService;
         private readonly Mock<ProblemDetailsFactory> _mockProblemDetailsFactory;
         private readonly Mock<IDistributedCache> _mockDistributedCache;
+        private readonly Mock<IQuickLinkerDiagnostic> _mockQuickLinkerDiagnostic;
         private readonly ShortLinkController _controller;
 
         private readonly string domainURL = "https://localhost:7132/";
@@ -29,6 +32,7 @@ namespace QuickLinker.Test.Controllers
             _mockShortLinkService = new Mock<IShortLinkService>();
             _mockProblemDetailsFactory = new Mock<ProblemDetailsFactory>();
             _mockDistributedCache = new Mock<IDistributedCache>();
+            _mockQuickLinkerDiagnostic = new Mock<IQuickLinkerDiagnostic>();
 
             var inMemorySettings = new Dictionary<string, string?> {
                 {"QuickLinkerDomain:Domain", domainURL}
@@ -43,7 +47,8 @@ namespace QuickLinker.Test.Controllers
                 _mockShortLinkService.Object,
                 configuration,
                 _mockProblemDetailsFactory.Object,
-                _mockDistributedCache.Object
+                _mockDistributedCache.Object,
+                _mockQuickLinkerDiagnostic.Object
             );
         }
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Caching.Distributed;
 using QuickLinker.API.Entities;
 using QuickLinker.API.Models;
+using QuickLinker.API.Observability;
 using QuickLinker.API.Services;
 
 namespace QuickLinker.API.Controllers
@@ -15,6 +16,7 @@ namespace QuickLinker.API.Controllers
         private readonly IShortLinkService _shortLinkService;
         private readonly ProblemDetailsFactory _problemDetailsFactory;
         private readonly IDistributedCache _distributedCache;
+        private readonly IQuickLinkerDiagnostic _quickLinkerDiagnostic;
 
         private readonly string? domainURL;
         private readonly int cacheExpirationInDays = 15;
@@ -27,12 +29,14 @@ namespace QuickLinker.API.Controllers
             IShortLinkService shortLinkService,
             IConfiguration configuration,
             ProblemDetailsFactory problemDetailsFactory,
-            IDistributedCache distributedCache)
+            IDistributedCache distributedCache,
+            IQuickLinkerDiagnostic quickLinkerDiagnostic)
         {
             _quickLinkerRepository = quickLinkerRepository;
             _shortLinkService = shortLinkService;
             _problemDetailsFactory = problemDetailsFactory;
             _distributedCache = distributedCache;
+            _quickLinkerDiagnostic = quickLinkerDiagnostic;
 
             AppSettings? appSettings = configuration.Get<AppSettings>();
 
@@ -69,6 +73,8 @@ namespace QuickLinker.API.Controllers
 
             var shortenedUrlToReturn = domainURL + shortenedURL.ShortCode;
 
+            _quickLinkerDiagnostic.AddShortLink();
+
             return Ok(shortenedUrlToReturn);
         }
 
@@ -93,6 +99,8 @@ namespace QuickLinker.API.Controllers
                     statusCode: 400,
                     detail: $"url cannot be null or empty, Enter a valid shortened URL"));
             }
+
+            _quickLinkerDiagnostic.AddOriginalLink();
 
             var originalURLToReturn = await _distributedCache.GetStringAsync(shortCode, cancellationToken);
 

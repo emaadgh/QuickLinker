@@ -15,7 +15,7 @@
             </summary>
             <returns>An IActionResult containing links to different API endpoints.</returns> 
         </member>
-        <member name="M:QuickLinker.API.Controllers.ShortLinkController.#ctor(QuickLinker.API.Services.IQuickLinkerRepository,QuickLinker.API.Services.IShortLinkService,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Mvc.Infrastructure.ProblemDetailsFactory,Microsoft.Extensions.Caching.Distributed.IDistributedCache)">
+        <member name="M:QuickLinker.API.Controllers.ShortLinkController.#ctor(QuickLinker.API.Services.IQuickLinkerRepository,QuickLinker.API.Services.IShortLinkService,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Mvc.Infrastructure.ProblemDetailsFactory,Microsoft.Extensions.Caching.Distributed.IDistributedCache,QuickLinker.API.Observability.IQuickLinkerDiagnostic)">
             <summary>
             Constructor for ShortLinkController.
             </summary>

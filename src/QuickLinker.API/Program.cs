@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Metrics;
 using QuickLinker.API;
 using QuickLinker.API.DbContexts;
+using QuickLinker.API.Observability;
 using QuickLinker.API.Services;
 using System.Reflection;
 
@@ -22,12 +24,27 @@ builder.Services.AddDbContext<QuickLinkerDbContext>(options =>
 
 builder.Services.AddTransient<IQuickLinkerRepository, QuickLinkerRepository>();
 builder.Services.AddScoped<IShortLinkService, ShortLinkService>();
+builder.Services.AddSingleton<IQuickLinkerDiagnostic, QuickLinkerDiagnostic>();
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = settings.ConnectionStrings.QuickLinkerRedisConnection;
     options.InstanceName = "QuickLinker";
 });
+
+builder.Services.AddOpenTelemetry()
+                    .WithMetrics(builder =>
+                    {
+                        builder.AddPrometheusExporter();
+                        builder.AddAspNetCoreInstrumentation();
+                        builder.AddRuntimeInstrumentation();
+                        var meter = new[]
+                        {
+                            "QuickLinkerDiagnostic"
+                        };
+
+                        builder.AddMeter(meter);
+                    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -65,5 +82,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
 app.Run();
