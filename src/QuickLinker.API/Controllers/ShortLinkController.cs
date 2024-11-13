@@ -66,12 +66,18 @@ namespace QuickLinker.API.Controllers
         {
             var shortUrl = _shortLinkService.GenerateShortLink(shortenedURLForCreationDTO.OriginalURL);
 
-            ShortenedURL shortenedURL = new ShortenedURL(shortUrl, shortenedURLForCreationDTO.OriginalURL);
+            var originalURLToReturn = await _distributedCache.GetStringAsync(shortUrl, cancellationToken);
 
-            await _quickLinkerRepository.AddShortenedURL(shortenedURL, cancellationToken);
-            await _quickLinkerRepository.SaveAsync(cancellationToken);
+            if (originalURLToReturn == null)
+            {
 
-            var shortenedUrlToReturn = domainURL + shortenedURL.ShortCode;
+                ShortenedURL shortenedURL = new ShortenedURL(shortUrl, shortenedURLForCreationDTO.OriginalURL);
+
+                await _quickLinkerRepository.AddShortenedURL(shortenedURL, cancellationToken);
+                await _quickLinkerRepository.SaveAsync(cancellationToken);
+            }
+
+            var shortenedUrlToReturn = domainURL + shortUrl;
 
             _quickLinkerDiagnostic.AddShortLink();
 

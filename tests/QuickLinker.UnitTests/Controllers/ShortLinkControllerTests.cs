@@ -53,11 +53,39 @@ namespace QuickLinker.Test.Controllers
         }
 
         [Fact]
-        public async Task CreateShortLink_ValidInput_MustReturnsShortenedUrl()
+        public async Task CreateShortLink_ValidInputWithoutCache_MustReturnsShortenedUrl()
         {
             // Arrange
             var shortenedURLForCreationDTO = new ShortenedURLForCreationDTO { OriginalURL = originalURL };
             _mockShortLinkService.Setup(x => x.GenerateShortLink(shortenedURLForCreationDTO.OriginalURL)).Returns(shortCode);
+
+            _mockDistributedCache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+              .Returns((string key, CancellationToken token) =>
+              {
+                  return Task.FromResult<byte[]?>(null);
+              });
+
+            // Act
+            var result = await _controller.CreateShortLink(shortenedURLForCreationDTO, default);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var shortenedUrlToReturn = Assert.IsType<string>(okResult.Value);
+            Assert.Equal(domainURL + shortCode, shortenedUrlToReturn);
+        }
+
+        [Fact]
+        public async Task CreateShortLink_ValidInputWithCache_MustReturnsShortenedUrl()
+        {
+            // Arrange
+            var shortenedURLForCreationDTO = new ShortenedURLForCreationDTO { OriginalURL = originalURL };
+            _mockShortLinkService.Setup(x => x.GenerateShortLink(shortenedURLForCreationDTO.OriginalURL)).Returns(shortCode);
+
+            _mockDistributedCache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+              .Returns((string key, CancellationToken token) =>
+              {
+                  return Task.FromResult<byte[]?>(Encoding.UTF8.GetBytes(originalURL));
+              });
 
             // Act
             var result = await _controller.CreateShortLink(shortenedURLForCreationDTO, default);
