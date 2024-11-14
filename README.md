@@ -19,7 +19,7 @@ QuickLinker.API is a backend service built using ASP.NET Core, designed to simpl
 3. Use the shortened URL for sharing or accessing the original content.
 4. Send GET requests to `/{shortCode}` with the short code to resolve and redirect to the original URL.
 
-<img src="https://github.com/user-attachments/assets/f16527c9-d7a7-49db-a3b5-a800ac6bce67" width="763.6" height="378">
+<img src="https://github.com/user-attachments/assets/85bf4653-1b56-4007-855f-bbd1d53bdbcb" width="763.6" height="378">
 
 
 ## Getting Started
